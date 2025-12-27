@@ -56,6 +56,7 @@ dnf -y install \
     fzf \
     git-core \
     glycin-thumbnailer \
+    gnome-disk-utility \
     gnome-keyring \
     gnome-keyring-pam \
     greetd \
