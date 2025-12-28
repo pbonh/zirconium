@@ -53,6 +53,7 @@ dnf -y install \
   fuse \
   fuse-common \
   fwupd \
+  gum \
   gvfs-archive \
   gvfs-mtp \
   gvfs-nfs \
