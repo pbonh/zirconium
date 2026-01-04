@@ -50,6 +50,21 @@ toggle-autorotation:
         exit 0
     fi
 
+toggle-fcitx5:
+    #!/usr/bin/env bash
+
+    if systemctl is-enabled --quiet --user fcitx5 ; then
+        systemctl disable --now --user fcitx5.service
+        systemctl mask --now --user fcitx5.service
+        echo "Disabled fcitx5"
+        exit 0
+    else
+        systemctl unmask --user fcitx5.service
+        systemctl enable --now --user fcitx5.service
+        echo "Enabled fcitx5"
+        exit 0
+    fi
+
 preinstalled-flatpaks:
     #!/usr/bin/env bash
     flatpak preinstall --reinstall

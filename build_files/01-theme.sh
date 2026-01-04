@@ -79,6 +79,12 @@ dnf -y install \
     xdg-desktop-portal-gtk \
     xdg-user-dirs \
     xwayland-satellite
+
+# we already have a service for handling fcitx5
+rm -f /usr/share/applications/fcitx5-wayland-launcher.desktop
+rm -f /usr/share/applications/org.fcitx.Fcitx5*.desktop
+
+# just breaks ostree deployments
 rm -rf /usr/share/doc/just
 
 dnf install -y --setopt=install_weak_deps=False \
@@ -120,6 +126,7 @@ systemctl enable --global chezmoi-init.service
 systemctl enable --global chezmoi-update.timer
 systemctl enable --global dms.service
 systemctl enable --global foot-server.service
+systemctl enable --global fcitx5.service
 systemctl enable --global gnome-keyring-daemon.service
 systemctl enable --global gnome-keyring-daemon.socket
 systemctl enable --global iio-niri.service
