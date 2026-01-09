@@ -29,7 +29,4 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/99-cleanup.sh
 
-# This is handy for VM testing
-RUN usermod -p "$(echo "changeme" | mkpasswd -s)" root
-
 RUN rm -rf /var/* && mkdir /var/tmp && bootc container lint
