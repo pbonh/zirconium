@@ -1,9 +1,9 @@
 zdots_path := "/usr/share/zirconium/zdots"
 
-# import "/usr/share/ublue-os/just/update.just"
-# import "/usr/share/ublue-os/just/shared.just"
-# import "/usr/share/ublue-os/just/default.just"
-# set allow-duplicate-recipes := true
+import "/usr/share/ublue-os/just/update.just"
+import "/usr/share/ublue-os/just/shared.just"
+import "/usr/share/ublue-os/just/default.just"
+set allow-duplicate-recipes := true
 
 default:
     @zjust --choose
