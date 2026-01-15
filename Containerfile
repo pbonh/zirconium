@@ -12,6 +12,7 @@ COPY --from=ghcr.io/ublue-os/brew:latest /system_files /files
 
 FROM quay.io/fedora/fedora-bootc:43
 ARG BUILD_FLAVOR="${BUILD_FLAVOR:-}"
+ARG TARGETARCH
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/var \
@@ -79,7 +80,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/04-protonmail.sh
+    sh -c 'arch="${TARGETARCH:-$(uname -m)}"; case "$arch" in amd64|x86_64) /ctx/build/04-protonmail.sh ;; *) echo "Skipping Proton Mail (unsupported arch: $arch)" ;; esac'
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \

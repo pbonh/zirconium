@@ -50,7 +50,7 @@ quick-iterate:
     just rootful
     BUILD_BASE_DIR=/tmp just disk-image
 
-export image_name := env("IMAGE_NAME", "ars-blue")
+export image_name := env("IMAGE_NAME", "zirconium")
 export default_tag := env("DEFAULT_TAG", "stable")
 
 # Build the image using the specified parameters
