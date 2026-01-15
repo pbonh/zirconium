@@ -37,6 +37,22 @@ echo "::group:: System Configuration"
 systemctl enable podman.socket
 # Example: systemctl mask unwanted-service
 
+# Install and globally enable tailscale systray (user service)
+install -d /usr/lib/systemd/user /etc/systemd/user/default.target.wants
+cat <<'EOF' >/usr/lib/systemd/user/tailscale-systray.service
+[Unit]
+Description=Tailscale System Tray
+After=systemd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/tailscale systray
+
+[Install]
+WantedBy=default.target
+EOF
+ln -sf /usr/lib/systemd/user/tailscale-systray.service /etc/systemd/user/default.target.wants/tailscale-systray.service
+
 echo "::endgroup::"
 
 echo "Custom build complete!"
