@@ -2,7 +2,7 @@
 
 set -xeuo pipefail
 
-HOME_URL="https://github.com/zirconium-dev/zirconium"
+HOME_URL="https://github.com/pbonh/zirconium"
 echo "zirconium" | tee "/etc/hostname"
 # OS Release File (changed in order with upstream)
 # TODO: change ANSI_COLOR
@@ -14,7 +14,7 @@ s|^VARIANT_ID=.*|VARIANT_ID=""|
 s|^HOME_URL=.*|HOME_URL=\"${HOME_URL}\"|
 s|^BUG_REPORT_URL=.*|BUG_REPORT_URL=\"${HOME_URL}/issues\"|
 s|^SUPPORT_URL=.*|SUPPORT_URL=\"${HOME_URL}/issues\"|
-s|^CPE_NAME=\".*\"|CPE_NAME=\"cpe:/o:zirconium-dev:zirconium\"|
+s|^CPE_NAME=\".*\"|CPE_NAME=\"cpe:/o:pbonh:zirconium\"|
 s|^DOCUMENTATION_URL=.*|DOCUMENTATION_URL=\"${HOME_URL}\"|
 s|^DEFAULT_HOSTNAME=.*|DEFAULT_HOSTNAME="zirconium"|
 
@@ -33,7 +33,7 @@ rm -rf /usr/bin/chsh # footgun
 systemctl enable rechunker-group-fix.service
 
 # These files NEED to be on the image.
-grep -F -e "ghcr.io/zirconium-dev" /etc/containers/policy.json
+grep -F -e "ghcr.io/pbonh" /etc/containers/policy.json
 stat /usr/share/pki/containers/zirconium.pub
 stat /usr/share/pki/containers/jackrabbit.pub
 stat /usr/bin/luks*tpm*
