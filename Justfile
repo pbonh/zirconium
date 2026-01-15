@@ -68,3 +68,8 @@ rechunk:
 clean:
     mkosi clean
     sudo rm -r mkosi.tools/ mkosi.cache/
+sign-image:
+    #!/usr/bin/env bash
+
+    cosign generate-key-pair
+    base64 -w0 cosign.key > cosign.key.b64
