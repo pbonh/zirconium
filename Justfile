@@ -66,3 +66,9 @@ build $target_image=image_name $tag=default_tag:
         --pull=newer \
         --tag "${target_image}:${tag}" \
         .
+
+sign-image:
+    #!/usr/bin/env bash
+
+    cosign generate-key-pair
+    base64 -w0 cosign.key > cosign.key.b64
