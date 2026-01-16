@@ -140,7 +140,7 @@ systemctl preset --global udiskie
 systemctl enable brew-setup.service
 systemctl enable flatpak-preinstall.service
 
-git clone "https://github.com/zirconium-dev/zdots.git" /usr/share/zirconium/zdots
+git clone "https://github.com/pbonh/zdots.git" /usr/share/zirconium/zdots
 install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/watermark.png
 install -Dpm0644 -t /usr/share/zirconium/skel/Pictures/Wallpapers/ /ctx/assets/wallpapers/*
 install -Dpm0644 -t /usr/share/zirconium/pixmaps/ /ctx/assets/logos/logo-z.svg
