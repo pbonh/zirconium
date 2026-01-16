@@ -18,10 +18,14 @@ echo "::group:: Install Extra System Packages"
 dnf5 install -y alacritty \
     ansible \
     distrobox \
+    fd-find \
     fzf \
     kitty \
     libreoffice \
+    neovim \
     nu \
+    octave \
+    ripgrep \
     syncthing \
     thunderbird \
     zsh

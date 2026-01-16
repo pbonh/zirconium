@@ -22,13 +22,13 @@ Alternatively, you can install Zirconium by doing a rebase from an existing Fedo
 
 Once you have some flavour of Fedora Atomic installed, run this command:
 
-```
+```bash
 sudo bootc switch ghcr.io/pbonh/zirconium:latest
 ```
 
 If you also have NVIDIA GPU (GTX 16xx or RTX series), run this command instead:
 
-```
+```bash
 sudo bootc switch ghcr.io/pbonh/zirconium-nvidia:latest
 ```
 
