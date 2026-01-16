@@ -94,7 +94,7 @@ dnf install -y \
     glibc-all-langpacks \
     default-fonts
 
-git clone "https://github.com/zirconium-dev/zdots.git" /usr/share/zirconium/zdots
+git clone "https://github.com/pbonh/zdots.git" /usr/share/zirconium/zdots
 
 XDG_EXT_TMPDIR="$(mktemp -d)"
 curl -fsSLo - "$(curl -fsSL https://api.github.com/repos/tulilirockz/xdg-terminal-exec-nautilus/releases/latest | jq -rc .tarball_url)" | tar -xzvf - -C "${XDG_EXT_TMPDIR}"
