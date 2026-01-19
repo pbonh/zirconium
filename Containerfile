@@ -52,6 +52,18 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/06-ghostty.sh
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build/07-cursor.sh
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build/08-zed.sh
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/99-cleanup.sh
 
 RUN rm -rf /var/* && mkdir /var/tmp && bootc container lint
