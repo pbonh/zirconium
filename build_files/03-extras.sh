@@ -13,22 +13,25 @@ set -eoux pipefail
 # shellcheck source=/dev/null
 source /ctx/build/copr-helpers.sh
 
+# Ensure Terra repo is available once for all downstream installs
+ensure_terra_repo
+
 echo "::group:: Install Extra System Packages"
 
 dnf5 install -y alacritty \
-    ansible \
-    distrobox \
-    fd-find \
-    fzf \
-    kitty \
-    libreoffice \
-    neovim \
-    nu \
-    octave \
-    ripgrep \
-    syncthing \
-    thunderbird \
-    zsh
+	ansible \
+	distrobox \
+	fd-find \
+	fzf \
+	kitty \
+	libreoffice \
+	neovim \
+	nu \
+	octave \
+	ripgrep \
+	syncthing \
+	thunderbird \
+	zsh
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
