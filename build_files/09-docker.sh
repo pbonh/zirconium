@@ -33,3 +33,4 @@ ${DNF_BIN} -y install \
   docker-compose-plugin
 
 systemctl enable docker.service
+systemctl enable containerd.service
