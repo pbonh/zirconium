@@ -35,6 +35,7 @@ dnf5 install -y alacritty \
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
+copr_install_isolated "jdxcode/mise" mise
 
 echo "::endgroup::"
 
