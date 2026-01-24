@@ -76,6 +76,12 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/10-codex.sh
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build/11-wezterm.sh
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/99-cleanup.sh
 
 RUN rm -rf /var/* && mkdir /var/tmp && bootc container lint
