@@ -20,6 +20,7 @@ echo "::group:: Install Extra System Packages"
 
 dnf5 install -y alacritty \
 	ansible \
+	carapace \
 	distrobox \
 	fd-find \
 	fzf \
@@ -29,8 +30,10 @@ dnf5 install -y alacritty \
 	nu \
 	octave \
 	ripgrep \
+	starship \
 	syncthing \
 	thunderbird \
+	zoxide \
 	zsh
 
 # Example using COPR with isolated pattern:
@@ -44,6 +47,12 @@ echo "::group:: System Configuration"
 # Enable/disable systemd services
 systemctl enable podman.socket
 # Example: systemctl mask unwanted-service
+
+# Install mise bash activation
+install -Dpm0755 /ctx/files/etc/profile.d/mise.sh /etc/profile.d/mise.sh
+install -Dpm0755 /ctx/files/etc/profile.d/carapace.sh /etc/profile.d/carapace.sh
+install -Dpm0755 /ctx/files/etc/profile.d/starship.sh /etc/profile.d/starship.sh
+install -Dpm0755 /ctx/files/etc/profile.d/zoxide.sh /etc/profile.d/zoxide.sh
 
 # Install and globally enable tailscale systray (user service)
 install -d /usr/lib/systemd/user /etc/systemd/user/default.target.wants
