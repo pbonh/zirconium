@@ -51,6 +51,7 @@ systemctl enable podman.socket
 # Install mise bash activation
 install -Dpm0755 /ctx/files/etc/profile.d/mise.sh /etc/profile.d/mise.sh
 install -Dpm0755 /ctx/files/etc/profile.d/carapace.sh /etc/profile.d/carapace.sh
+install -Dpm0755 /ctx/files/etc/profile.d/fzf.sh /etc/profile.d/fzf.sh
 install -Dpm0755 /ctx/files/etc/profile.d/starship.sh /etc/profile.d/starship.sh
 install -Dpm0755 /ctx/files/etc/profile.d/zoxide.sh /etc/profile.d/zoxide.sh
 
