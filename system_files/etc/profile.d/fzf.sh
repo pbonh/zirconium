@@ -1,3 +1,5 @@
 [[ -n "${BASH_VERSION:-}" ]] || return 0
 
-eval "$(/usr/bin/fzf --bash)"
+if [[ ! ${BLE_VERSION-} ]]; then
+  eval "$(/usr/bin/fzf --bash)"
+fi
