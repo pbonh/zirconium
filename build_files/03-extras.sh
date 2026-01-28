@@ -44,7 +44,9 @@ copr_install_isolated "jdxcode/mise" mise
 
 # Install ble.sh from source (latest master)
 BLESH_DIR="/var/tmp/blesh"
-git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git "${BLESH_DIR}"
+git clone --depth 1 https://github.com/akinomyoga/ble.sh.git "${BLESH_DIR}"
+git -C "${BLESH_DIR}" submodule set-url contrib https://github.com/pbonh/blesh-contrib
+git -C "${BLESH_DIR}" submodule update --init --recursive --depth 1
 make -C "${BLESH_DIR}" install DESTDIR=/ PREFIX=/usr
 echo 'ble-attach' | tee -a "/etc/bashrc"
 rm -rf "${BLESH_DIR}"
