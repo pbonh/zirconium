@@ -34,6 +34,7 @@ dnf5 install -y alacritty \
   starship \
   syncthing \
   thunderbird \
+  yazi \
   zoxide \
   zsh
 
