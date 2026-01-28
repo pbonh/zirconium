@@ -19,26 +19,33 @@ ensure_terra_repo
 echo "::group:: Install Extra System Packages"
 
 dnf5 install -y alacritty \
-	ansible \
-	carapace \
-	distrobox \
-	fd-find \
-	fzf \
-	kitty \
-	libreoffice \
-	neovim \
-	nu \
-	octave \
-	ripgrep \
-	starship \
-	syncthing \
-	thunderbird \
-	zoxide \
-	zsh
+  ansible \
+  atuin \
+  carapace \
+  distrobox \
+  fd-find \
+  fzf \
+  kitty \
+  libreoffice \
+  neovim \
+  nu \
+  octave \
+  ripgrep \
+  starship \
+  syncthing \
+  thunderbird \
+  zoxide \
+  zsh
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
 copr_install_isolated "jdxcode/mise" mise
+
+# Install ble.sh from source (latest master)
+BLESH_DIR="/var/tmp/blesh"
+git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git "${BLESH_DIR}"
+make -C "${BLESH_DIR}" install DESTDIR=/ PREFIX=/usr
+rm -rf "${BLESH_DIR}"
 
 echo "::endgroup::"
 
@@ -54,6 +61,7 @@ install -Dpm0755 /ctx/files/etc/profile.d/carapace.sh /etc/profile.d/carapace.sh
 install -Dpm0755 /ctx/files/etc/profile.d/fzf.sh /etc/profile.d/fzf.sh
 install -Dpm0755 /ctx/files/etc/profile.d/starship.sh /etc/profile.d/starship.sh
 install -Dpm0755 /ctx/files/etc/profile.d/zoxide.sh /etc/profile.d/zoxide.sh
+install -Dpm0755 /ctx/files/etc/profile.d/blesh.sh /etc/profile.d/blesh.sh
 
 # Install and globally enable tailscale systray (user service)
 install -d /usr/lib/systemd/user /etc/systemd/user/default.target.wants

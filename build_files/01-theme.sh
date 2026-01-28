@@ -166,7 +166,7 @@ rm -rf "${MAPLE_NF_TMPDIR}"
 
 fc-cache --force --really-force --system-only --verbose # recreate font-cache to pick up the added fonts
 
-echo 'source /usr/share/zirconium/shell/pure.bash' | tee -a "/etc/bashrc"
+# echo 'source /usr/share/zirconium/shell/pure.bash' | tee -a "/etc/bashrc"
 
 tee /usr/lib/tmpfiles.d/99-greeter-config.conf <<'EOF'
 L /var/cache/dms-greeter/settings.json - greeter greeter - /usr/share/zirconium/zdots/dot_config/DankMaterialShell/settings.json
