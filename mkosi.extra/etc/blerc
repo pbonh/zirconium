@@ -2,3 +2,4 @@ source -- /etc/profile.d/bash_completion.sh
 ble-import -d integration/fzf-completion
 ble-import -d integration/fzf-key-bindings
 ble-import -d integration/fzf-menu
+bleopt default_keymap=vi
