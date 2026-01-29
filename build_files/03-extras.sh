@@ -14,7 +14,7 @@ set -eoux pipefail
 source /ctx/build/copr-helpers.sh
 
 echo "::group:: Install Development Tools from Fedora Repo"
-dnf5 groupinstall "Development Tools"
+dnf5 groupinstall -y "Development Tools"
 
 # Ensure Terra repo is available once for all downstream installs
 ensure_terra_repo
