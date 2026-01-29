@@ -110,10 +110,6 @@ enroll-secure-boot-key:
     #!/usr/bin/env bash
     echo "This is not implemented yet!"
 
-configure-mise-gpg:
-  #!/usr/bin/env bash
-  ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "gpg"
-
-configure-mise:
-  #!/usr/bin/env bash
-  ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "config" --skip-tags "install"
+configure-brew:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git homebrew.yml --tags "config" --skip-tags "install"
