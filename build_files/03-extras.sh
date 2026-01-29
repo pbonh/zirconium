@@ -14,7 +14,7 @@ set -eoux pipefail
 source /ctx/build/copr-helpers.sh
 
 echo "::group:: Install Development Tools from Fedora Repo"
-dnf5 install -y libstdc++-devel gcc-g++
+dnf5 install -y glibc-devel libstdc++-devel gcc-g++
 dnf5 install -y @c-development @development-tools
 
 # Ensure Terra repo is available once for all downstream installs
@@ -44,7 +44,7 @@ dnf5 install -y alacritty \
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
-copr_install_isolated "jdxcode/mise" mise
+# copr_install_isolated "jdxcode/mise" mise
 
 # Install ble.sh from source (latest master)
 BLESH_DIR="/var/tmp/blesh"
@@ -63,8 +63,8 @@ echo "::group:: System Configuration"
 systemctl enable podman.socket
 # Example: systemctl mask unwanted-service
 
-# Install mise bash activation
-install -Dpm0755 /ctx/files/etc/profile.d/mise.sh /etc/profile.d/mise.sh
+# Install brew bash activation
+install -Dpm0755 /ctx/files/etc/profile.d/brew.sh /etc/profile.d/brew.sh
 install -Dpm0755 /ctx/files/etc/profile.d/carapace.sh /etc/profile.d/carapace.sh
 install -Dpm0755 /ctx/files/etc/profile.d/fzf.sh /etc/profile.d/fzf.sh
 install -Dpm0755 /ctx/files/etc/profile.d/starship.sh /etc/profile.d/starship.sh

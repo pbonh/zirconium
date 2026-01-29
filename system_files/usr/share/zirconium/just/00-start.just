@@ -122,3 +122,7 @@ configure-mise-gpg:
 configure-mise:
   #!/usr/bin/env bash
   ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "config" --skip-tags "install"
+
+configure-brew:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git homebrew.yml --tags "config" --skip-tags "install"
