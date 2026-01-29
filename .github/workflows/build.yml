@@ -34,7 +34,8 @@ jobs:
       matrix:
         flavor: [""]
         # flavor: ["", "nvidia"]
-        platform: ["amd64", "arm64"]
+        # platform: ["amd64", "arm64"]
+        platform: ["amd64"]
     runs-on: ${{ matrix.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     steps:
       - name: Mount BTRFS for podman storage
