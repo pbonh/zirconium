@@ -16,8 +16,7 @@ if test ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/zirconium/no-show-user-motd" ; t
     ${slight_red} zjust zdots-update ${reset}               │ Update your unmodified dotfiles
     ${slight_red} zjust update-greeter ${reset}             │ Update your greeter with modifications from your current user
     ${slight_red} zjust reset-niri ${reset}                 │ Reset niri to the default configuration
-    ${slight_red} zjust configure-mise-gpg ${reset}         │ Install mise GPG Keys
-    ${slight_red} zjust configure-mise ${reset}             │ Install mise config for CLI Developer Tools
+    ${slight_red} zjust install-brew-tools ${reset}         │ Install CLI Developer Tools via Linuxbrew
 
 EOF
 fi
