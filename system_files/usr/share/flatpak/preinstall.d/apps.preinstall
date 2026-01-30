@@ -9,6 +9,10 @@ Branch=stable
 [Flatpak Preinstall io.github.dvlv.boxbuddyrs]
 Branch=stable
 
+# Office
+[Flatpak Preinstall com.collaboraoffice.Office]
+Branch=stable
+
 # AI
 [Flatpak Preinstall com.jeffser.Alpaca]
 Branch=stable
