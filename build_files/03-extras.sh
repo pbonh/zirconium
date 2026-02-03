@@ -23,24 +23,24 @@ ensure_terra_repo
 echo "::group:: Install Extra System Packages"
 
 dnf5 install -y alacritty \
-  ansible \
-  atuin \
-  carapace \
-  distrobox \
-  fd-find \
-  fzf \
-  kitty \
-  libreoffice \
-  neovim \
-  nu \
-  octave \
-  ripgrep \
-  starship \
-  syncthing \
-  thunderbird \
-  yazi \
-  zoxide \
-  zsh
+	ansible \
+	atuin \
+	carapace \
+	distrobox \
+	fd-find \
+	fzf \
+	kitty \
+	libreoffice \
+	neovim \
+	nu \
+	octave \
+	ripgrep \
+	starship \
+	syncthing \
+	thunderbird \
+	yazi \
+	zoxide \
+	zsh
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
@@ -52,7 +52,7 @@ git clone --depth 1 https://github.com/akinomyoga/ble.sh.git "${BLESH_DIR}"
 git -C "${BLESH_DIR}" submodule set-url contrib https://github.com/pbonh/blesh-contrib
 git -C "${BLESH_DIR}" submodule update --init --recursive --depth 1
 make -C "${BLESH_DIR}" install DESTDIR=/ PREFIX=/usr
-echo 'ble-attach' | tee -a "/etc/bashrc"
+echo '[[ -n "${BASH_VERSION:-}" && $- == *i* ]] && ble-attach' | tee -a "/etc/bashrc"
 rm -rf "${BLESH_DIR}"
 
 echo "::endgroup::"
