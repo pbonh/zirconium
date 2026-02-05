@@ -110,6 +110,10 @@ enroll-secure-boot-key:
     #!/usr/bin/env bash
     echo "This is not implemented yet!"
 
-configure-brew:
+install-brew-tools:
     #!/usr/bin/env bash
     ansible-pull -U https://github.com/pbonh/ars.git homebrew.yml --tags "config" --skip-tags "install"
+
+distrobox-assemble:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git distrobox.yml
