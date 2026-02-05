@@ -18,6 +18,7 @@ if test ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/zirconium/no-show-user-motd" ; t
     ${slight_red} zjust reset-niri ${reset}                 │ Reset niri to the default configuration
     ${slight_red} zjust preinstalled-flatpaks ${reset}      │ Install Included Flatpak Applications
     ${slight_red} zjust install-brew-tools ${reset}         │ Install CLI Developer Tools via Linuxbrew
+    ${slight_red} zjust distrobox-assemble ${reset}         │ Assemble Distrobox Dev Containers
 
 EOF
 fi
