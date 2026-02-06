@@ -45,6 +45,7 @@ disk-image $filesystem=filesystem:
 
 quick-iterate:
     #!/usr/bin/env bash
+    set -xeuo pipefail
     podman build -t zirconium:latest .
     just rootful
     BUILD_BASE_DIR=/tmp just disk-image

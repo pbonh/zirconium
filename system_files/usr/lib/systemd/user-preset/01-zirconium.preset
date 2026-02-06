@@ -1,7 +1,10 @@
-enable dms.service
 enable chezmoi-init.service
 enable chezmoi-update.timer
-enable foot-server.service
-enable iio-niri.service
+enable dms.service
 enable fcitx5.service
+enable foot-server.service
+enable foot-server.socket
+enable gnome-keyring-daemon.service
+enable gnome-keyring-daemon.socket
+enable iio-niri.service
 enable udiskie.service
