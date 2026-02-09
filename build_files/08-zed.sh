@@ -28,7 +28,7 @@ nightly)
 esac
 
 # Install Zed (stable/preview/nightly via ZED_CHANNEL)
-dnf5 install -y "${zed_pkg}"
+dnf5 install -y --enablerepo=terra --enablerepo=terra-extras "${zed_pkg}"
 
 # Cleanup
 dnf5 clean all

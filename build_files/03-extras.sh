@@ -22,7 +22,7 @@ ensure_terra_repo
 
 echo "::group:: Install Extra System Packages"
 
-dnf5 install -y alacritty \
+dnf5 install -y --enablerepo=terra --enablerepo=terra-extras alacritty \
 	ansible \
 	atuin \
 	carapace \

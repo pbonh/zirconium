@@ -8,7 +8,7 @@ source /ctx/build/copr-helpers.sh
 ensure_terra_repo
 
 # Install Ghostty
-dnf5 install -y ghostty
+dnf5 install -y --enablerepo=terra --enablerepo=terra-extras ghostty
 
 # Cleanup
 dnf5 clean all
