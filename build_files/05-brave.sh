@@ -49,6 +49,42 @@ curl -fsSLo "${BRAVE_REPO_PATH}" "${BRAVE_REPO_URL}"
 # Install Brave (Fedora 41+ docs: add repo then dnf install brave-browser)
 dnf5 install -y --enablerepo="${BRAVE_REPO_ID}" "${BRAVE_PKG}"
 
+# Move payload to /var/opt and create stable launcher in /usr/lib
+BRAVE_BIN_REL=""
+if [[ -x /opt/brave.com/brave/brave ]]; then
+	BRAVE_BIN_REL="brave/brave"
+elif [[ -x /opt/brave.com/brave-beta/brave ]]; then
+	BRAVE_BIN_REL="brave-beta/brave"
+elif [[ -x /opt/brave.com/brave-nightly/brave ]]; then
+	BRAVE_BIN_REL="brave-nightly/brave"
+fi
+
+if [[ -d /opt/brave.com ]]; then
+	install -d /var/opt
+	rm -rf /var/opt/brave.com
+	mv /opt/brave.com /var/opt/
+fi
+
+if [[ -n "${BRAVE_BIN_REL}" ]]; then
+	install -d /usr/lib/brave
+	cat <<'EOF' >/usr/lib/brave/brave
+#!/usr/bin/env bash
+exec /var/opt/brave.com/__BRAVE_BIN_REL__ "$@"
+EOF
+	sed -i "s|__BRAVE_BIN_REL__|${BRAVE_BIN_REL}|g" /usr/lib/brave/brave
+	chmod 0755 /usr/lib/brave/brave
+	for bin in /usr/bin/brave-browser /usr/bin/brave-browser-beta /usr/bin/brave-browser-nightly; do
+		if [[ -e "${bin}" ]]; then
+			ln -sf /usr/lib/brave/brave "${bin}"
+		fi
+	done
+	for desktop in /usr/share/applications/brave*.desktop; do
+		if [[ -f "${desktop}" ]]; then
+			sed -i 's|^Exec=.*|Exec=/usr/lib/brave/brave|g' "${desktop}"
+		fi
+	done
+fi
+
 # Cleanup
 dnf5 clean all
 rm -rf /var/cache/dnf /var/cache/dnf5 || true

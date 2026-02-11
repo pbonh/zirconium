@@ -26,15 +26,16 @@ esac
 
 TMPDIR="$(mktemp -d)"
 APPIMAGE_TEMP="${TMPDIR}/Cursor.AppImage"
-APPDIR="/opt/cursor"
+APPDIR="/var/opt/cursor"
 APPIMAGE_PATH="${APPDIR}/Cursor.AppImage"
-BIN_LINK="/usr/local/bin/cursor"
+BIN_LINK="/usr/lib/cursor/cursor"
+BIN_SYMLINK="/usr/bin/cursor"
 
 # Download AppImage
 curl -fsSL "${CURSOR_APPIMAGE_URL}" -o "${APPIMAGE_TEMP}"
 chmod +x "${APPIMAGE_TEMP}"
 
-# Install AppImage to /opt
+# Install AppImage to /var/opt
 install -d "${APPDIR}"
 mv "${APPIMAGE_TEMP}" "${APPIMAGE_PATH}"
 
@@ -43,10 +44,10 @@ pushd "${TMPDIR}"
 "${APPIMAGE_PATH}" --appimage-extract
 popd
 
-# Install .desktop file, adjusting Exec to point to the symlink
+# Install .desktop file, adjusting Exec to point to the launcher
 desktop_file="$(find "${TMPDIR}/squashfs-root" -name '*.desktop' | head -n1)"
 if [[ -n "${desktop_file}" ]]; then
-	sed -i 's|^Exec=.*|Exec=/usr/local/bin/cursor|g' "${desktop_file}"
+	sed -i 's|^Exec=.*|Exec=/usr/lib/cursor/cursor|g' "${desktop_file}"
 	install -Dm644 "${desktop_file}" /usr/share/applications/cursor.desktop
 fi
 
@@ -61,9 +62,15 @@ if [[ -f "${TMPDIR}/squashfs-root/.DirIcon" ]]; then
 	install -Dm644 "${TMPDIR}/squashfs-root/.DirIcon" /usr/share/icons/hicolor/512x512/apps/cursor.png
 fi
 
-# Symlink into PATH
+# Launcher and PATH symlink
 install -d "$(dirname "${BIN_LINK}")"
-ln -sf "${APPIMAGE_PATH}" "${BIN_LINK}"
+cat <<'EOF' >"${BIN_LINK}"
+#!/usr/bin/env bash
+exec /var/opt/cursor/Cursor.AppImage "$@"
+EOF
+chmod 0755 "${BIN_LINK}"
+install -d "$(dirname "${BIN_SYMLINK}")"
+ln -sf "${BIN_LINK}" "${BIN_SYMLINK}"
 
 # Cleanup
 rm -rf "${TMPDIR}"
