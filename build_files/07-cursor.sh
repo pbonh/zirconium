@@ -26,7 +26,7 @@ esac
 
 TMPDIR="$(mktemp -d)"
 APPIMAGE_TEMP="${TMPDIR}/Cursor.AppImage"
-APPDIR="/var/opt/cursor"
+APPDIR="/usr/lib/cursor"
 APPIMAGE_PATH="${APPDIR}/Cursor.AppImage"
 BIN_LINK="/usr/lib/cursor/cursor"
 BIN_SYMLINK="/usr/bin/cursor"
@@ -35,7 +35,7 @@ BIN_SYMLINK="/usr/bin/cursor"
 curl -fsSL "${CURSOR_APPIMAGE_URL}" -o "${APPIMAGE_TEMP}"
 chmod +x "${APPIMAGE_TEMP}"
 
-# Install AppImage to /var/opt
+# Install AppImage to /usr/lib
 install -d "${APPDIR}"
 mv "${APPIMAGE_TEMP}" "${APPIMAGE_PATH}"
 
@@ -66,7 +66,7 @@ fi
 install -d "$(dirname "${BIN_LINK}")"
 cat <<'EOF' >"${BIN_LINK}"
 #!/usr/bin/env bash
-exec /var/opt/cursor/Cursor.AppImage "$@"
+exec /usr/lib/cursor/Cursor.AppImage "$@"
 EOF
 chmod 0755 "${BIN_LINK}"
 install -d "$(dirname "${BIN_SYMLINK}")"

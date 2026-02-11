@@ -31,7 +31,7 @@ curl -fsSL "${VIVALDI_RPM_URL}" -o "${VIVALDI_RPM_PATH}"
 # Install RPM
 dnf5 install -y "${VIVALDI_RPM_PATH}"
 
-# Move payload to /var/opt and create stable launcher in /usr/lib
+# Move payload to /usr/lib and create stable launcher in /usr/lib
 VIVALDI_BIN_REL=""
 if [[ -x /opt/vivaldi/vivaldi ]]; then
 	VIVALDI_BIN_REL="vivaldi"
@@ -40,16 +40,16 @@ elif [[ -x /opt/vivaldi/vivaldi-bin ]]; then
 fi
 
 if [[ -d /opt/vivaldi ]]; then
-	install -d /var/opt
-	rm -rf /var/opt/vivaldi
-	mv /opt/vivaldi /var/opt/
+	install -d /usr/lib
+	rm -rf /usr/lib/vivaldi
+	mv /opt/vivaldi /usr/lib/
 fi
 
 if [[ -n "${VIVALDI_BIN_REL}" ]]; then
 	install -d /usr/lib/vivaldi
 	cat <<'EOF' >/usr/lib/vivaldi/vivaldi
 #!/usr/bin/env bash
-exec /var/opt/vivaldi/__VIVALDI_BIN_REL__ "$@"
+exec /usr/lib/vivaldi/__VIVALDI_BIN_REL__ "$@"
 EOF
 	sed -i "s|__VIVALDI_BIN_REL__|${VIVALDI_BIN_REL}|g" /usr/lib/vivaldi/vivaldi
 	chmod 0755 /usr/lib/vivaldi/vivaldi

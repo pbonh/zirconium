@@ -49,8 +49,9 @@ curl -fsSLo "${BRAVE_REPO_PATH}" "${BRAVE_REPO_URL}"
 # Install Brave (Fedora 41+ docs: add repo then dnf install brave-browser)
 dnf5 install -y --enablerepo="${BRAVE_REPO_ID}" "${BRAVE_PKG}"
 
-# Move payload to /var/opt and create stable launcher in /usr/lib
+# Move payload to /usr/lib and create stable launcher in /usr/lib
 BRAVE_BIN_REL=""
+BRAVE_PAYLOAD_DIR="/usr/lib/brave.com"
 if [[ -x /opt/brave.com/brave/brave ]]; then
 	BRAVE_BIN_REL="brave/brave"
 elif [[ -x /opt/brave.com/brave-beta/brave ]]; then
@@ -60,16 +61,16 @@ elif [[ -x /opt/brave.com/brave-nightly/brave ]]; then
 fi
 
 if [[ -d /opt/brave.com ]]; then
-	install -d /var/opt
-	rm -rf /var/opt/brave.com
-	mv /opt/brave.com /var/opt/
+	install -d /usr/lib
+	rm -rf "${BRAVE_PAYLOAD_DIR}"
+	mv /opt/brave.com "${BRAVE_PAYLOAD_DIR}"
 fi
 
 if [[ -n "${BRAVE_BIN_REL}" ]]; then
 	install -d /usr/lib/brave
 	cat <<'EOF' >/usr/lib/brave/brave
 #!/usr/bin/env bash
-exec /var/opt/brave.com/__BRAVE_BIN_REL__ "$@"
+exec /usr/lib/brave.com/__BRAVE_BIN_REL__ "$@"
 EOF
 	sed -i "s|__BRAVE_BIN_REL__|${BRAVE_BIN_REL}|g" /usr/lib/brave/brave
 	chmod 0755 /usr/lib/brave/brave
