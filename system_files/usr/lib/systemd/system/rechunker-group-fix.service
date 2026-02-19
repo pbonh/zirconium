@@ -20,7 +20,7 @@ After=local-fs.target
 
 [Service]
 Type=oneshot
-ExecStart=bash -c 'mv /etc/gshadow "/etc/gshadow-pre-zirc-rechunker-fix.$(date -u +%%Y%%m%%d%%H%%M%%S)"'
+ExecStart=rm /etc/gshadow
 ExecStart=systemd-sysusers
 ExecStart=rechunker-group-fix
 ExecStart=systemd-tmpfiles --create --remove --boot --exclude-prefix=/dev
