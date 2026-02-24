@@ -10,7 +10,7 @@ COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared/usr/bin/lu
 COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared/usr/share/ublue-os/just /files/usr/share/ublue-os/just
 COPY --from=ghcr.io/ublue-os/brew:latest /system_files /files
 
-FROM quay.io/fedora/fedora-bootc:43
+FROM quay.io/fedora/fedora-bootc:44
 ARG BUILD_FLAVOR="${BUILD_FLAVOR:-}"
 ARG TARGETARCH
 
@@ -23,8 +23,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build/00-base-pre.sh
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
     --mount=type=tmpfs,dst=/run \
     --mount=type=tmpfs,dst=/boot \
     --mount=type=cache,dst=/var/cache/libdnf5 \
