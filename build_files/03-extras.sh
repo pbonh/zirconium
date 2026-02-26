@@ -35,12 +35,15 @@ dnf5 install -y --enablerepo=terra --enablerepo=terra-extras alacritty \
 	nu \
 	octave \
 	ripgrep \
-	starship \
 	syncthing \
 	thunderbird \
 	yazi \
 	zoxide \
 	zsh
+
+echo "::group:: Install Starship from COPR"
+copr_install_isolated "atim/starship" starship
+echo "::endgroup::"
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
