@@ -108,7 +108,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/09-docker.sh
+    sh -c 'TARGETARCH="${TARGETARCH:-$(uname -m)}"; export TARGETARCH; /ctx/build/09-docker.sh'
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
