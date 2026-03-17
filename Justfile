@@ -11,8 +11,26 @@ default:
     sudo env BUILD_BASE_DIR=/tmp just disk-image
     vmbuddy -f /tmp/bootable.img
 
+ensure-submodules:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    missing=0
+    while IFS= read -r line; do
+        case "$line" in
+            -*) missing=1 ;;
+        esac
+    done < <(git submodule status --recursive)
+
+    if [ "$missing" -eq 1 ]; then
+        git submodule sync --recursive
+        git submodule update --init --recursive
+    fi
+
 build:
-    mkosi -B --debug
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just ensure-submodules
+    mkosi -B --debug --repository-key-fetch=yes
 
 lint:
     podman run --rm -it --entrypoint=bootc {{ image }} container lint

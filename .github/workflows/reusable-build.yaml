@@ -126,7 +126,7 @@ jobs:
           if [ "$CI_MKOSI_PROFILES" != "" ] ; then
             PROFILE_ARGUMENTS+=("--profile=$CI_MKOSI_PROFILES")
           fi
-          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:latest" mkosi -B ${PROFILE_ARGUMENTS}
+          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:latest" mkosi -B --repository-key-fetch=yes ${PROFILE_ARGUMENTS}
 
       - name: Load image
         id: load
