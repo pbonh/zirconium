@@ -114,3 +114,19 @@ alias set-accent-colour := set-accent-color
 
 set-accent-color:
 	gsettings set org.gnome.desktop.interface accent-color "$(gum choose blue teal green yellow orange red pink purple slate --limit 1 --header "Pick an accent colour")"
+
+configure-mise-gpg:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "gpg"
+
+configure-mise:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "config" --skip-tags "install"
+
+install-brew-tools:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git homebrew.yml --tags "config" --skip-tags "install"
+
+distrobox-assemble:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git distrobox.yml

@@ -153,7 +153,7 @@ jobs:
           if [ "$CI_MKOSI_RELEASE" != "" ] ; then
             RELEASE_ARGUMENTS+=("--release=$CI_MKOSI_RELEASE")
           fi
-          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:${DEFAULT_TAG}" mkosi -B -ff --debug ${PROFILE_ARGUMENTS} ${RELEASE_ARGUMENTS}
+          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:${DEFAULT_TAG}" mkosi -B -ff --debug --repository-key-fetch=yes ${PROFILE_ARGUMENTS} ${RELEASE_ARGUMENTS}
 
       - name: Load image
         id: load
@@ -225,6 +225,7 @@ jobs:
           REMOTE_IMAGE_DIGEST: ${{ steps.push.outputs.remote_image_digest }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: cosign sign -y --new-bundle-format=false --use-signing-config=false --key env://COSIGN_PRIVATE_KEY "${IMAGE_REGISTRY}/${IMAGE_NAME}@${REMOTE_IMAGE_DIGEST}"
 
       - name: Create Job Outputs
@@ -354,6 +355,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           LABELS: ${{ steps.metadata.outputs.labels }}
           OUTPUT_CSV: ${{ steps.load-outputs.outputs.OUTPUT_CSV }}
           TAGS: ${{ steps.metadata.outputs.tags }}
