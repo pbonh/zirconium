@@ -222,3 +222,19 @@ generate-bug-report:
     EOF
 
     gzip -9c $REPORT_DATA | base64 | fpaste -t "zirconium report $(date +%Y%m%d%H%M%S)" --private=1
+
+configure-mise-gpg:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "gpg"
+
+configure-mise:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git mise.yml --tags "config" --skip-tags "install"
+
+install-brew-tools:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git homebrew.yml --tags "config" --skip-tags "install"
+
+distrobox-assemble:
+    #!/usr/bin/env bash
+    ansible-pull -U https://github.com/pbonh/ars.git distrobox.yml

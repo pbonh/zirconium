@@ -11,13 +11,28 @@ default:
     sudo env BUILD_BASE_DIR=/tmp just disk-image
     vmbuddy -f /tmp/bootable.img
 
-build: build-ostree
+ensure-submodules:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    missing=0
+    while IFS= read -r line; do
+        case "$line" in
+            -*) missing=1 ;;
+        esac
+    done < <(git submodule status --recursive)
+
+    if [ "$missing" -eq 1 ]; then
+        git submodule sync --recursive
+        git submodule update --init --recursive
+    fi
+
+build: ensure-submodules build-ostree
 
 build-ostree:
-    mkosi -B --debug --profile=bootc-ostree
+    mkosi -B --debug --repository-key-fetch=yes --profile=bootc-ostree
 
 build-sysupdate:
-    mkosi -B --debug --profile=sysupdate
+    mkosi -B --debug --repository-key-fetch=yes --profile=sysupdate
 
 lint:
     podman run --rm -it --entrypoint=bootc {{ image }} container lint
@@ -73,3 +88,9 @@ rechunk:
 clean:
     mkosi clean
     sudo rm -r mkosi.tools/ mkosi.cache/
+
+sign-image:
+    #!/usr/bin/env bash
+
+    cosign generate-key-pair
+    base64 -w0 cosign.key > cosign.key.b64
