@@ -19,6 +19,101 @@ just --completions fish | sed -E 's/([\(_" ])just/\1zjust/g' > /usr/share/fish/v
 
 fc-cache --force --really-force --system-only --verbose # recreate font-cache to pick up the added fonts
 
+# --- ble.sh from source (with pbonh/blesh-contrib fork) ---
+if [ -d "$SRCDIR/cache/blesh-src" ] ; then
+    make -C "$SRCDIR/cache/blesh-src" install DESTDIR=/ PREFIX=/usr
+    echo '[[ -n "${BASH_VERSION:-}" && $- == *i* ]] && ble-attach' | tee -a "/etc/bashrc"
+fi
+
+# --- Cursor AppImage ---
+if [ -e "$SRCDIR/cache/Cursor.AppImage" ] ; then
+    CURSOR_DIR="/usr/lib/cursor"
+    install -d "${CURSOR_DIR}"
+    install -m0755 "$SRCDIR/cache/Cursor.AppImage" "${CURSOR_DIR}/Cursor.AppImage"
+
+    TMPDIR_CURSOR="$(mktemp -d)"
+    pushd "${TMPDIR_CURSOR}"
+    "${CURSOR_DIR}/Cursor.AppImage" --appimage-extract 2>/dev/null || true
+    popd
+
+    desktop_file="$(find "${TMPDIR_CURSOR}/squashfs-root" -name '*.desktop' -print -quit 2>/dev/null || true)"
+    if [ -n "${desktop_file}" ] ; then
+        sed -i 's|^Exec=.*|Exec=/usr/lib/cursor/cursor|g' "${desktop_file}"
+        install -Dm644 "${desktop_file}" /usr/share/applications/cursor.desktop
+    fi
+    find "${TMPDIR_CURSOR}/squashfs-root" -path '*/icons/hicolor/*' -type f -print0 | while IFS= read -r -d '' icon; do
+        rel_path="${icon#${TMPDIR_CURSOR}/squashfs-root/}"
+        install -Dm644 "${icon}" "/usr/share/${rel_path}"
+    done
+    if [ -f "${TMPDIR_CURSOR}/squashfs-root/.DirIcon" ] ; then
+        install -Dm644 "${TMPDIR_CURSOR}/squashfs-root/.DirIcon" /usr/share/icons/hicolor/512x512/apps/cursor.png
+    fi
+
+    cat <<'CURSOREOF' >"${CURSOR_DIR}/cursor"
+#!/usr/bin/env bash
+exec /usr/lib/cursor/Cursor.AppImage "$@"
+CURSOREOF
+    chmod 0755 "${CURSOR_DIR}/cursor"
+    ln -sf "${CURSOR_DIR}/cursor" /usr/bin/cursor
+
+    rm -rf "${TMPDIR_CURSOR}"
+fi
+
+# --- Vivaldi RPM + /opt -> /usr/lib relocation ---
+if [ -e "$SRCDIR/cache/vivaldi-stable.rpm" ] ; then
+    dnf5 install -y "$SRCDIR/cache/vivaldi-stable.rpm" || rpm -ivh --nodeps "$SRCDIR/cache/vivaldi-stable.rpm"
+    if [ -d /opt/vivaldi ] ; then
+        rm -rf /usr/lib/vivaldi
+        mv /opt/vivaldi /usr/lib/vivaldi
+        for bin in /usr/bin/vivaldi-stable /usr/bin/vivaldi; do
+            [ -e "${bin}" ] && ln -sf /usr/lib/vivaldi/vivaldi "${bin}"
+        done
+        for desktop in /usr/share/applications/vivaldi*.desktop; do
+            [ -f "${desktop}" ] && sed -i 's|^Exec=.*|Exec=/usr/lib/vivaldi/vivaldi|g' "${desktop}"
+        done
+    fi
+fi
+
+# --- Brave /opt -> /usr/lib relocation (installed via mkosi Packages=) ---
+if [ -d /opt/brave.com ] ; then
+    rm -rf /usr/lib/brave.com
+    mv /opt/brave.com /usr/lib/brave.com
+    BRAVE_BIN_REL=""
+    [ -x /usr/lib/brave.com/brave/brave ] && BRAVE_BIN_REL="brave/brave"
+    [ -x /usr/lib/brave.com/brave-beta/brave ] && BRAVE_BIN_REL="brave-beta/brave"
+    if [ -n "${BRAVE_BIN_REL}" ] ; then
+        install -d /usr/lib/brave
+        printf '#!/usr/bin/env bash\nexec /usr/lib/brave.com/%s "$@"\n' "${BRAVE_BIN_REL}" > /usr/lib/brave/brave
+        chmod 0755 /usr/lib/brave/brave
+        for bin in /usr/bin/brave-browser /usr/bin/brave-browser-beta; do
+            [ -e "${bin}" ] && ln -sf /usr/lib/brave/brave "${bin}"
+        done
+        for desktop in /usr/share/applications/brave*.desktop; do
+            [ -f "${desktop}" ] && sed -i 's|^Exec=.*|Exec=/usr/lib/brave/brave|g' "${desktop}"
+        done
+    fi
+fi
+
+# --- ProtonMail ---
+if [ -e "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" ] ; then
+    dnf5 install -y "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" || rpm -ivh --nodeps "$SRCDIR/cache/ProtonMail-desktop-beta.rpm"
+fi
+
+# --- Codex (npm global install) ---
+if command -v npm >/dev/null 2>&1 ; then
+    NPM_TMPDIR="$(mktemp -d)"
+    HOME="${NPM_TMPDIR}" NPM_CONFIG_CACHE="${NPM_TMPDIR}/cache" NPM_CONFIG_PREFIX=/usr npm install -g @openai/codex
+    rm -rf "${NPM_TMPDIR}"
+fi
+
+# --- Enable services ---
+systemctl enable podman.socket
+systemctl enable docker.service containerd.service
+
+# Enable tailscale-systray user service globally
+install -d /etc/systemd/user/default.target.wants
+ln -sf /usr/lib/systemd/user/tailscale-systray.service /etc/systemd/user/default.target.wants/tailscale-systray.service
+
 # These files NEED to be on the image.
 grep -F -e "ghcr.io/pbonh" /usr/share/factory/etc/containers/policy.json
 grep -F -e "Comment=Central repository of Flatpak applications" /usr/share/flatpak/remotes.d/flathub.flatpakrepo

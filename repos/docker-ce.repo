@@ -1,0 +1,6 @@
+[docker-ce-stable]
+name=Docker CE Stable - Fedora 43 ($basearch)
+baseurl=https://download.docker.com/linux/fedora/43/$basearch/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://download.docker.com/linux/fedora/gpg
