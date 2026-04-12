@@ -99,11 +99,15 @@ if [ -e "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" ] ; then
     dnf5 install -y "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" || rpm -ivh --nodeps "$SRCDIR/cache/ProtonMail-desktop-beta.rpm"
 fi
 
-# --- Codex (npm global install) ---
+# --- Codex (install from cached tarball — postinst has no network) ---
 if command -v npm >/dev/null 2>&1 ; then
-    NPM_TMPDIR="$(mktemp -d)"
-    HOME="${NPM_TMPDIR}" NPM_CONFIG_CACHE="${NPM_TMPDIR}/cache" NPM_CONFIG_PREFIX=/usr npm install -g @openai/codex
-    rm -rf "${NPM_TMPDIR}"
+    codex_tgz="$(find "$SRCDIR/cache" -maxdepth 1 -name 'openai-codex-*.tgz' -o -name 'codex.tgz' 2>/dev/null | head -1)"
+    if [ -n "${codex_tgz}" ] ; then
+        NPM_TMPDIR="$(mktemp -d)"
+        HOME="${NPM_TMPDIR}" NPM_CONFIG_CACHE="${NPM_TMPDIR}/cache" NPM_CONFIG_PREFIX=/usr \
+            npm install -g "${codex_tgz}"
+        rm -rf "${NPM_TMPDIR}"
+    fi
 fi
 
 # --- Enable services ---
