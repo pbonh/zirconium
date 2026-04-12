@@ -1,5 +1,6 @@
 image := env("IMAGE_FULL", "localhost/zirconium:latest")
 filesystem := env("BUILD_FILESYSTEM", "btrfs")
+enable_terra := env("ENABLE_TERRA", "1")
 
 default:
     #!/usr/bin/env bash
@@ -29,9 +30,19 @@ ensure-submodules:
 build: ensure-submodules build-ostree
 
 build-ostree:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ enable_terra }}" = "1" ]; then
+        export ENABLE_TERRA=1
+    fi
     mkosi -B --debug --repository-key-fetch=yes --profile=bootc-ostree
 
 build-sysupdate:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ enable_terra }}" = "1" ]; then
+        export ENABLE_TERRA=1
+    fi
     mkosi -B --debug --repository-key-fetch=yes --profile=sysupdate
 
 lint:
