@@ -18,3 +18,41 @@ fi
 if [ ! -e "${SRCDIR}/cache/flathub.flatpakrepo" ] ; then
 	curl --retry 3 -Lo "${SRCDIR}/cache/flathub.flatpakrepo" "https://dl.flathub.org/repo/flathub.flatpakrepo"
 fi
+
+# --- Cursor AppImage ---
+if [ ! -e "${SRCDIR}/cache/Cursor.AppImage" ] ; then
+	arch="$(uname -m)"
+	case "${arch}" in
+		x86_64|amd64)  CURSOR_URL="https://api2.cursor.sh/updates/download/golden/linux-x64/cursor/2.3" ;;
+		aarch64|arm64) CURSOR_URL="https://api2.cursor.sh/updates/download/golden/linux-arm64/cursor/2.3" ;;
+		*) echo "Unsupported arch for Cursor: ${arch}" >&2; exit 1 ;;
+	esac
+	curl -fsSL "${CURSOR_URL}" -o "${SRCDIR}/cache/Cursor.AppImage"
+	chmod +x "${SRCDIR}/cache/Cursor.AppImage"
+fi
+
+# --- Vivaldi RPM ---
+if [ ! -e "${SRCDIR}/cache/vivaldi-stable.rpm" ] ; then
+	VIVALDI_VERSION="${VIVALDI_VERSION:-7.8.3925.62-1}"
+	arch="$(uname -m)"
+	case "${arch}" in
+		x86_64|amd64)  vivaldi_arch="x86_64" ;;
+		aarch64|arm64) vivaldi_arch="aarch64" ;;
+		*) echo "Unsupported arch for Vivaldi: ${arch}" >&2; exit 1 ;;
+	esac
+	curl -fsSL "https://downloads.vivaldi.com/stable/vivaldi-stable-${VIVALDI_VERSION}.${vivaldi_arch}.rpm" \
+		-o "${SRCDIR}/cache/vivaldi-stable.rpm"
+fi
+
+# --- ProtonMail RPM ---
+if [ ! -e "${SRCDIR}/cache/ProtonMail-desktop-beta.rpm" ] ; then
+	curl -fsSL "https://proton.me/download/mail/linux/ProtonMail-desktop-beta.rpm" \
+		-o "${SRCDIR}/cache/ProtonMail-desktop-beta.rpm"
+fi
+
+# --- ble.sh source ---
+if [ ! -d "${SRCDIR}/cache/blesh-src" ] ; then
+	git clone --depth 1 https://github.com/akinomyoga/ble.sh.git "${SRCDIR}/cache/blesh-src"
+	git -C "${SRCDIR}/cache/blesh-src" submodule set-url contrib https://github.com/pbonh/blesh-contrib
+	git -C "${SRCDIR}/cache/blesh-src" submodule update --init --recursive --depth 1
+fi
