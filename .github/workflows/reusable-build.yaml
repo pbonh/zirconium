@@ -45,6 +45,11 @@ on:
         description: "Release to build for"
         required: false
         type: string
+      enable-terra:
+        description: "Enable Terra repository packages (disable when Terra has upstream issues)"
+        required: false
+        type: boolean
+        default: true
     secrets:
       SIGNING_SECRET:
         description: "The private key used to sign the image"
@@ -144,6 +149,7 @@ jobs:
         env:
           CI_MKOSI_PROFILES: ${{ inputs.profiles }}
           CI_MKOSI_RELEASE: ${{ inputs.release }}
+          CI_ENABLE_TERRA: ${{ inputs.enable-terra }}
         run: |
           PROFILE_ARGUMENTS=()
           if [ "$CI_MKOSI_PROFILES" != "" ] ; then
@@ -153,7 +159,11 @@ jobs:
           if [ "$CI_MKOSI_RELEASE" != "" ] ; then
             RELEASE_ARGUMENTS+=("--release=$CI_MKOSI_RELEASE")
           fi
-          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:${DEFAULT_TAG}" mkosi -B -ff --debug --repository-key-fetch=yes ${PROFILE_ARGUMENTS} ${RELEASE_ARGUMENTS}
+          TERRA_ENV=()
+          if [ "$CI_ENABLE_TERRA" = "true" ]; then
+            TERRA_ENV=(ENABLE_TERRA=1)
+          fi
+          sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:${DEFAULT_TAG}" "${TERRA_ENV[@]}" mkosi -B -ff --debug --repository-key-fetch=yes ${PROFILE_ARGUMENTS} ${RELEASE_ARGUMENTS}
 
       - name: Load image
         id: load
