@@ -56,3 +56,12 @@ if [ ! -d "${SRCDIR}/cache/blesh-src" ] ; then
 	git -C "${SRCDIR}/cache/blesh-src" submodule set-url contrib https://github.com/pbonh/blesh-contrib
 	git -C "${SRCDIR}/cache/blesh-src" submodule update --init --recursive --depth 1
 fi
+
+# --- Codex npm tarball (postinst has no network) ---
+if [ ! -e "${SRCDIR}/cache/codex.tgz" ] ; then
+	CODEX_TMPDIR="$(mktemp -d)"
+	HOME="${CODEX_TMPDIR}" NPM_CONFIG_CACHE="${CODEX_TMPDIR}/cache" \
+		npm pack @openai/codex --pack-destination "${SRCDIR}/cache" 2>/dev/null || \
+		curl -fsSL "$(npm view @openai/codex dist.tarball)" -o "${SRCDIR}/cache/codex.tgz"
+	rm -rf "${CODEX_TMPDIR}"
+fi
