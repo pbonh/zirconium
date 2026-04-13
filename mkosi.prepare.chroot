@@ -44,8 +44,8 @@ if [ ! -e "${SRCDIR}/cache/vivaldi-stable.rpm" ] ; then
 		-o "${SRCDIR}/cache/vivaldi-stable.rpm"
 fi
 
-# --- ProtonMail RPM ---
-if [ ! -e "${SRCDIR}/cache/ProtonMail-desktop-beta.rpm" ] ; then
+# --- ProtonMail RPM (x86_64 only) ---
+if [ "$(uname -m)" = "x86_64" ] && [ ! -e "${SRCDIR}/cache/ProtonMail-desktop-beta.rpm" ] ; then
 	curl -fsSL "https://proton.me/download/mail/linux/ProtonMail-desktop-beta.rpm" \
 		-o "${SRCDIR}/cache/ProtonMail-desktop-beta.rpm"
 fi

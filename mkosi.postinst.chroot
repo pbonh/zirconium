@@ -94,8 +94,8 @@ if [ -d /opt/brave.com ] ; then
     fi
 fi
 
-# --- ProtonMail ---
-if [ -e "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" ] ; then
+# --- ProtonMail (x86_64 only) ---
+if [ "$(uname -m)" = "x86_64" ] && [ -e "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" ] ; then
     dnf5 install -y "$SRCDIR/cache/ProtonMail-desktop-beta.rpm" || rpm -ivh --nodeps "$SRCDIR/cache/ProtonMail-desktop-beta.rpm"
 fi
 
