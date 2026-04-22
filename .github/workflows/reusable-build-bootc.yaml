@@ -97,6 +97,24 @@ jobs:
       matrix: ${{fromJson(needs.generate_matrix.outputs.matrix)}}
     runs-on: ${{ matrix.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     steps:
+      - name: Free disk space on runner
+        run: |
+          set -x
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /usr/local/lib/android \
+            /opt/ghc \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/share/boost \
+            /usr/local/lib/node_modules \
+            /usr/local/share/powershell \
+            /usr/share/swift \
+            /opt/microsoft \
+            /opt/google || true
+          sudo docker image prune --all --force || true
+          df -h /
+
       - name: Mount BTRFS for podman storage
         if: matrix.platform != 'arm64' && inputs.cleanup_action
         uses: ublue-os/container-storage-action@dc1f4c8f17b672069e921f001132f7cf98a423a6
@@ -167,6 +185,13 @@ jobs:
         run: |
           set -e
           sudo env IMAGE_FULL="localhost/${IMAGE_NAME}:${DEFAULT_TAG}" "$(which just)" load
+
+      - name: Reclaim space from build outputs
+        run: |
+          set -x
+          df -h /
+          sudo rm -rf mkosi.output mkosi.tools
+          df -h /
 
       - name: Rechunk image
         run: |
