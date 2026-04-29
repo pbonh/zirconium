@@ -16,3 +16,12 @@ mkosi.crt
 mkosi.version
 mkosi.rootpw
 .mkosi-private
+
+# Cosign — never commit private keys
+cosign.key
+cosign.key.b64
+cosign.key.*
+
+# BlueBuild local build artifacts
+.bluebuild/
+Containerfile
