@@ -1,6 +1,6 @@
-[submodule "assets"]
-	path = assets
-	url = https://github.com/pbonh/assets.git
 [submodule "files/zdots"]
 	path = files/zdots
 	url = https://github.com/pbonh/zdots.git
+[submodule "files/assets"]
+	path = files/assets
+	url = https://github.com/pbonh/assets.git

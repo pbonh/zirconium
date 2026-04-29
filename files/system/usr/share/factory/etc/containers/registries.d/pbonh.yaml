@@ -1,0 +1,3 @@
+docker:
+  ghcr.io/pbonh:
+    use-sigstore-attachments: true

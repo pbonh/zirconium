@@ -9,12 +9,14 @@ modules:
       # so BlueBuild's files module resolves it correctly via source: zdots
       - source: zdots
         destination: /usr/share/zirconium/zdots
+      # assets submodule lives at files/assets/ (relocated from top-level assets/)
+      # delivers user wallpapers to the standard zirconium wallpapers path
+      - source: assets/wallpapers
+        destination: /usr/share/zirconium/skel/Pictures/Wallpapers
 
   # Ensure chezmoi-update.timer is enabled for all users
   # (chezmoi unit files are inherited from upstream zirconium — not copied here)
   - type: systemd
-    system:
-      enabled: []
     user:
       enabled:
         - chezmoi-update.timer
