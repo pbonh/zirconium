@@ -1,0 +1,6 @@
+---
+# User-owned /usr/bin scripts (just `zmotd` per Phase 2 audit) are mirrored
+# into the image by the files module in recipe 03. This recipe file is
+# a placeholder for any scripts that need extra setup (chmod, chown, link
+# creation) beyond the verbatim copy. Currently nothing is required.
+modules: []
