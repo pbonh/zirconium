@@ -1,98 +1,30 @@
-image := env("IMAGE_FULL", "localhost/zirconium:latest")
-filesystem := env("BUILD_FILESYSTEM", "btrfs")
-enable_terra := env("ENABLE_TERRA", "1")
+default: build
 
-default:
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    just build
-    sudo just load
-    sudo just lint
-    sudo just ostree-rechunk
-    sudo env BUILD_BASE_DIR=/tmp just disk-image
-    vmbuddy -f /tmp/bootable.img
-
-ensure-submodules:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    missing=0
-    while IFS= read -r line; do
-        case "$line" in
-            -*) missing=1 ;;
-        esac
-    done < <(git submodule status --recursive)
-
-    if [ "$missing" -eq 1 ]; then
-        git submodule sync --recursive
-        git submodule update --init --recursive
-    fi
-
+# Build the image locally (requires bluebuild CLI: cargo install --locked bluebuild)
 build:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    just ensure-submodules
-    if [ "{{ enable_terra }}" = "1" ]; then
-        export ENABLE_TERRA=1
-    fi
-    mkosi -B --debug --repository-key-fetch=yes
+    bluebuild build recipes/recipe.yml
 
+# Render the Containerfile without building (useful for inspecting what BlueBuild generates)
+generate:
+    bluebuild generate recipes/recipe.yml
+
+# Lint the rendered Containerfile + recipe
 lint:
-    podman run --rm -it --entrypoint=bootc {{ image }} container lint
+    bluebuild validate recipes/recipe.yml
 
-load:
-    #!/usr/bin/env bash
-    set -x
-    podman load -i "$(find mkosi.output/* -maxdepth 0 -type d -printf "%T@ ,%p\n" -iname "_*" -print0 | sort -n | head -n1 | cut -d, -f2)" -q | cut -d: -f3 | xargs -I{} podman tag {} {{image}}
+# Rebase a running Fedora atomic system to the locally-built image
+switch-local:
+    sudo bootc switch --transport containers-storage localhost/zirconium:latest
 
-ostree-rechunk:
-    #!/usr/bin/env bash
-    sudo podman run --rm \
-          --privileged \
-          -t \
-          -v /var/lib/containers:/var/lib/containers \
-          "quay.io/centos-bootc/centos-bootc:stream10" \
-          /usr/libexec/bootc-base-imagectl rechunk --max-layers 120 \
-          "{{image}}" \
-          "{{image}}" || exit 1
+# Rebase to the published GHCR image (normal install/update path)
+switch-remote:
+    sudo bootc switch ghcr.io/pbonh/zirconium:latest
 
-bootc *ARGS:
-    podman run \
-        --rm --privileged --pid=host \
-        -it \
-        -v /sys/fs/selinux:/sys/fs/selinux \
-        -v /etc/containers:/etc/containers:Z \
-        -v /var/lib/containers:/var/lib/containers:Z \
-        -v /dev:/dev \
-        -v "${BUILD_BASE_DIR:-.}:/data" \
-        --security-opt label=type:unconfined_t \
-        "{{image}}" bootc {{ARGS}}
+# Initialize all submodules (zdots, optionally assets)
+submodule-init:
+    git submodule update --init --recursive
 
-disk-image $filesystem=filesystem:
-    #!/usr/bin/env bash
-    if [ ! -e "${BUILD_BASE_DIR:-.}/bootable.img" ] ; then
-        fallocate -l 20G "${BUILD_BASE_DIR:-.}/bootable.img"
-    fi
-    just bootc install to-disk --generic-image --bootloader grub --via-loopback /data/bootable.img --filesystem "${filesystem}" --wipe
-
-rechunk:
-    #!/usr/bin/env bash
-    IMG="{{ image }}"
-    # podman pull $IMG # image must be available locally
-    export CHUNKAH_CONFIG_STR="$(sudo podman inspect "${IMG}")"
-    podman run --rm "--mount=type=image,src=${IMG},dest=/chunkah" -e CHUNKAH_CONFIG_STR quay.io/jlebon/chunkah build --label ostree.bootable=1 --compressed --max-layers 67 | \
-        podman load | \
-        sort -n | \
-        head -n1 | \
-        cut -d, -f2 | \
-        cut -d: -f3 | \
-        xargs -I{} sudo podman tag {} {{image}}
-
+# Clean local build artifacts
 clean:
-    mkosi clean
-    sudo rm -r mkosi.tools/ mkosi.cache/
-
-sign-image:
-    #!/usr/bin/env bash
-
-    cosign generate-key-pair
-    base64 -w0 cosign.key > cosign.key.b64
+    podman image rm -f localhost/zirconium:latest 2>/dev/null || true
+    rm -rf .bluebuild/

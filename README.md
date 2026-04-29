@@ -1,49 +1,69 @@
-# Zirconium
-***Do you like how I dance? I've got Zirconium pants!***
+# zirconium
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/73e4e017-893b-46fc-b6ce-351c176d444c" />
+Personal customization layer on top of [zirconium](https://github.com/zirconium-dev/zirconium), built with [BlueBuild](https://blue-build.org).
 
-## What is Zirconium?
-Zirconium is an opinionated fedora-bootc image that makes use of Niri and DankMaterialShell to create a usable out of the box TWM experience.
+Upstream zirconium provides niri (tiling Wayland compositor), DankMaterialShell, the Fedora-bootc base, and the broader desktop session. This image adds:
 
-Zirconium is built primarily for container-focused development and day-to-day usage, however gaming is still more than possible. For a fully gaming-focused experience, use Bazzite.
+- **Browsers:** Brave
+- **Terminals:** Ghostty, WezTerm-nightly, Kitty
+- **Editors:** Neovim, [Zed](https://zed.dev) (via Terra), [Cursor](https://cursor.com) (via AppImage)
+- **AI coding CLIs:** `claude` ([Claude Code](https://www.npmjs.com/package/@anthropic-ai/claude-code)), `codex` ([OpenAI Codex CLI](https://www.npmjs.com/package/@openai/codex)), `pi` ([Pi coding agent](https://www.npmjs.com/package/@mariozechner/pi-coding-agent))
+- **Container/dev tooling:** Docker CE, distrobox, Node.js, gcc/make, Ansible
+- **Shell stack additions:** atuin, carapace, nu, syncthing, yazi, qt6ct
+- **Personal flatpaks:** Bitwarden, Obsidian, Collabora Office, Alpaca, etc.
+- **Dotfiles:** auto-applied via [chezmoi](https://chezmoi.io) from [pbonh/zdots](https://github.com/pbonh/zdots) on first login
 
-## How do I use this?
-The best way to install Zirconium is to download our ISOs! Pick your flavor:
+Everything else (DE, shell stack baseline, theme, base hardware support) flows through from upstream automatically.
 
-- AMD64
-  - **[AMD/Intel GPUs](https://isos.zirconium.gay/zirconium-isos/zirconium-amd64.iso)** ([Checksum](https://isos.zirconium.gay/zirconium-isos/zirconium-amd64.iso-CHECKSUM))
-  - **[NVIDIA GPUs (GTX 16xx and RTX series)](https://isos.zirconium.gay/zirconium-isos/zirconium-nvidia-amd64.iso)** ([Checksum](https://isos.zirconium.gay/zirconium-isos/zirconium-nvidia-amd64.iso-CHECKSUM))
-- ARM64
-  - **[AMD/Intel GPUs](https://isos.zirconium.gay/zirconium-isos/zirconium-arm64.iso)** ([Checksum](https://isos.zirconium.gay/zirconium-isos/zirconium-arm64.iso-CHECKSUM))
-  - **[NVIDIA GPUs (GTX 16xx and RTX series)](https://isos.zirconium.gay/zirconium-isos/zirconium-nvidia-arm64.iso)** ([Checksum](https://isos.zirconium.gay/zirconium-isos/zirconium-nvidia-arm64.iso-CHECKSUM))
+## Install
 
-Alternatively, you can install Zirconium by doing a rebase from an existing Fedora Atomic install. We recommend [Bluefin](https://projectbluefin.io/), but it doesn't really matter.
+From any existing Fedora bootc / Silverblue / Kinoite system:
 
-Once you have some flavour of Fedora Atomic installed, run this command:
+    sudo bootc switch ghcr.io/pbonh/zirconium:latest
+    sudo systemctl reboot
 
-```
-sudo bootc switch ghcr.io/pbonh/zirconium:latest
-```
+If you don't yet have a bootc-capable Fedora install, install Fedora Silverblue from the [official ISO](https://fedoraproject.org/silverblue/) first, then run the command above.
 
-If you also have NVIDIA GPU (GTX 16xx or RTX series), run this command instead:
+## Update
 
-```
-sudo bootc switch ghcr.io/pbonh/zirconium-nvidia:latest
-```
+Updates are pulled automatically by `bootc-fetch-apply-updates.timer`. To trigger an update manually:
 
-[Join our Discord](https://discord.gg/mmgNQpxwhW)!
+    sudo bootc upgrade
+    sudo systemctl reboot
 
-## Notice about Nvidia GPUs
+To roll back to the previous deployment:
 
-Currently the Nvidia kernel module is not being signed so there is no way of using secure boot on the `-nvidia` images. ([related issue](https://github.com/zirconium-dev/zirconium/issues/108))
+    sudo bootc rollback
 
-## Can I still customize Niri/DankMaterialShell?
-Yes! Put your Niri customizations in `~/.config/niri/local.kdl` (for your user) or `/etc/niri/local.kdl` (for system-wide customizations).
+## Verify image signature
 
-We update our dotfiles in OS updates, which will overwrite the default `~/.config/niri/config.kdl` file. If you edit it, it might get overwritten in a future update. 
+The image is signed with cosign. To verify against the public key in this repo:
 
-## Zirconium is a stupid name. Why did you pick Zirconium?
-A weird wax baby made me.
+    cosign verify --key cosign.pub ghcr.io/pbonh/zirconium:latest
 
-[![Tally Hall - Ruler of Everything](https://img.youtube.com/vi/I8sUC-dsW8A/0.jpg)](https://www.youtube.com/watch?v=I8sUC-dsW8A)
+## Build locally
+
+Install the BlueBuild CLI (requires Rust):
+
+    cargo install --locked bluebuild
+
+Then:
+
+    just submodule-init    # one-time setup for the zdots submodule
+    just build             # full build → localhost/zirconium:latest
+    just generate          # render the Containerfile without building
+    just lint              # validate the recipe
+
+To install your local build instead of the published image:
+
+    just switch-local
+
+## Customize
+
+Most changes are edits to one of the `recipes/NN-*.yml` module files, or new files added under `files/system/`. See the [BlueBuild docs](https://blue-build.org/learn/) for module reference.
+
+For changes that should affect the upstream image (niri configs, DMS configs, base packages), open a PR or issue at [zirconium-dev/zirconium](https://github.com/zirconium-dev/zirconium) instead — this repo is intentionally a thin layer.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

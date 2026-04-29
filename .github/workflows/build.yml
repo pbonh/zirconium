@@ -1,0 +1,27 @@
+---
+name: build
+on:
+  push:
+    branches:
+      - main
+      - bluebuild
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 1 * * 2'   # Tuesday 01:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build:
+    uses: blue-build/github-action/.github/workflows/build.yml@v1
+    with:
+      recipe: recipes/recipe.yml
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
