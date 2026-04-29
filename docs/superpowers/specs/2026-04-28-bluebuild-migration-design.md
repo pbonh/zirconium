@@ -11,6 +11,7 @@ Migrate `pbonh/zirconium` from a fork of `zirconium-dev/zirconium` (mkosi-based 
 
 - Produce `ghcr.io/pbonh/zirconium:latest` from a BlueBuild recipe whose base image is `ghcr.io/zirconium-dev/zirconium:latest`, signed with cosign, built and published by GitHub Actions on push / PR / weekly schedule / manual dispatch.
 - Preserve the user-facing experience: niri + DMS (inherited), chezmoi-applied dotfiles from `pbonh/zdots`, personal additions (Brave, Ghostty, WezTerm-nightly, Docker CE), custom scripts (whichever of `zjust`/`zfetch`/`glorpfetch`/`zmotd`/`zocr` are actually user-owned vs. inherited).
+- Add new tools as part of v1: Zed (Terra RPM), Cursor (AppImage with extracted `.desktop` + icons), and three AI coding CLIs installed system-wide via npm (`@anthropic-ai/claude-code`, `@openai/codex`, `@mariozechner/pi-coding-agent`).
 - Install/update via `bootc switch` / `bootc upgrade` — no behavior change for the end user.
 - Drop everything no longer needed once we stop maintaining a from-scratch build: nvidia variant, prebuilt ISO, S3 upload, osbuild, mkosi tooling, ublue-brew submodule, bluefin-common submodule, all `mkosi.profiles/` content, all `mkosi.conf.d/` files that re-declared upstream config, all `mkosi.extra/` content that came from upstream.
 
@@ -32,7 +33,7 @@ Implication: we inherit upstream's release cadence and signing chain. Trade-off:
 
 ### Recipe organization
 
-Modular: a short `recipes/recipe.yml` lists `from-file` references. Five module files cover the user's actual additions; everything else comes from the base.
+Modular: a short `recipes/recipe.yml` lists `from-file` references. Six module files cover the user's actual additions; everything else comes from the base.
 
 ### Repo layout (post-migration)
 
@@ -41,16 +42,19 @@ zirconium/
 ├── recipes/
 │   ├── recipe.yml              # base-image: ghcr.io/zirconium-dev/zirconium + from-file refs
 │   ├── 01-extra-repos.yml      # Brave, Ghostty, WezTerm-nightly, Docker CE COPRs/repos
-│   ├── 02-extra-packages.yml   # brave-browser, ghostty, wezterm, docker-ce + plugins, pbonh-extras pkgs
+│   ├── 02-extra-packages.yml   # brave-browser, ghostty, wezterm, docker-ce + plugins, pbonh-extras pkgs, zed
 │   ├── 03-dotfiles.yml         # zdots submodule + chezmoi --user systemd unit/timer
 │   ├── 04-custom-scripts.yml   # user-owned scripts copied to /usr/bin (audit-determined subset)
-│   └── 05-flatpaks.yml         # personal flatpak preinstall list (delta over upstream)
+│   ├── 05-flatpaks.yml         # personal flatpak preinstall list (delta over upstream)
+│   └── 06-extra-tooling.yml    # script module → install-cursor.sh + install-ai-clis.sh
 ├── files/
 │   ├── system/                 # copied verbatim into image at /
 │   │   ├── usr/bin/            # user-owned custom scripts
 │   │   ├── usr/lib/systemd/user/  # chezmoi-apply.service + .timer
 │   │   └── usr/share/zirconium/zdots/  # populated by submodule via files entry
-│   └── scripts/                # any postinst hook still needed (likely empty)
+│   └── scripts/
+│       ├── install-cursor.sh   # download Cursor AppImage, extract .desktop + icons, install
+│       └── install-ai-clis.sh  # npm install -g claude-code, codex, pi-coding-agent
 ├── zdots/                      # submodule, github.com/pbonh/zdots
 ├── assets/                     # submodule kept pending audit; drop if fully redundant with upstream
 ├── cosign.pub                  # NEW key, see Security
@@ -88,6 +92,9 @@ The translation table is small because we're only carrying over user-owned conte
 | `mkosi.extra/usr/bin/{zjust,zfetch,glorpfetch,zmotd,zocr}` (audit-filtered subset) | `04-custom-scripts.yml` copies via `files` module to `files/system/usr/bin/` |
 | Personal flatpak preinstall list (delta over upstream) | `05-flatpaks.yml` (`default-flatpaks` module) |
 | `mkosi.postinst.chroot` and `mkosi.prepare.chroot` | Likely empty after migration — most contents were setting up the from-scratch build. Anything genuinely user-specific that survives audit goes to `files/scripts/` invoked by BlueBuild's `script` module. |
+| (new) Zed editor | `02-extra-packages.yml` adds `zed`. Terra repo is already enabled by upstream zirconium, so no new repo entry needed. Per [zed.dev/docs/linux](https://zed.dev/docs/linux), the Terra RPM is the recommended install method on Fedora; the Flathub build has a known sandboxing issue ([flathub/dev.zed.Zed#275](https://github.com/flathub/dev.zed.Zed/pull/275)) and is explicitly avoided. |
+| (new) Cursor editor | `06-extra-tooling.yml` invokes `files/scripts/install-cursor.sh`, which: downloads the latest Cursor AppImage at build time, runs `--appimage-extract`, copies the `.desktop` file (with paths rewritten to absolute) into `/usr/share/applications/cursor.desktop`, copies extracted icons into `/usr/share/icons/hicolor/<size>/apps/`, installs the AppImage to `/opt/cursor/cursor.AppImage`, and creates a `/usr/bin/cursor` wrapper that execs the AppImage with `--no-sandbox` if needed. |
+| (new) AI coding CLIs | `06-extra-tooling.yml` invokes `files/scripts/install-ai-clis.sh`, which runs `npm install -g @anthropic-ai/claude-code @openai/codex @mariozechner/pi-coding-agent` at build time. Installs the binaries `claude`, `codex`, and `pi` system-wide under `/usr/lib/node_modules/`. Updates ride the weekly image rebuild. |
 
 ### Audit step (precondition for implementation)
 
@@ -153,7 +160,7 @@ clean:
 ### README outline
 
 1. One-line description: "Personal customization layer on top of [zirconium](https://github.com/zirconium-dev/zirconium), built with BlueBuild."
-2. What this adds vs. upstream: bullet list of personal additions (Brave, Ghostty, WezTerm-nightly, Docker CE, dotfiles, custom scripts).
+2. What this adds vs. upstream: bullet list of personal additions (Brave, Ghostty, WezTerm-nightly, Docker CE, Zed, Cursor, AI CLIs (`claude`, `codex`, `pi`), dotfiles, custom scripts).
 3. Install (from existing Fedora bootc / Silverblue / Kinoite system: `bootc switch ghcr.io/pbonh/zirconium:latest`).
 4. Update (`bootc upgrade` + `bootc rollback`).
 5. Verify image signature (cosign, with both keyless and key-based examples).
@@ -185,15 +192,16 @@ Work happens on a `bluebuild` branch; `main` only fast-forwards once the new ima
 5. **Reset submodules.** Remove `subprojects/ublue-brew` and `subprojects/bluefin-common` from `.gitmodules`; relocate `mkosi.extra/usr/share/zirconium/zdots` → `zdots/` in `.gitmodules` (URL unchanged); decide on `assets` based on audit.
 6. **Generate cosign key.** New keypair → public commits at repo root, private goes into `SIGNING_SECRET` GH secret (handled outside the migration commit).
 7. **Scaffold BlueBuild.** Copy in skeleton from BlueBuild's [template repo](https://github.com/blue-build/template), prune to our needs, set `base-image: ghcr.io/zirconium-dev/zirconium`, commit.
-8. **Recipes 01–02** (extra repos + extra packages). First test that the layer builds cleanly on top of upstream.
+8. **Recipes 01–02** (extra repos + extra packages, including `zed` from Terra). First test that the layer builds cleanly on top of upstream.
 9. **Recipes 03–05** (dotfiles, custom scripts, flatpaks).
-10. **Workflow + Justfile + README.**
-11. **Local CI dry run.** `bluebuild validate` + `bluebuild generate` to confirm Containerfile renders.
-12. **Push branch, let GHA build.** Iterate on failures.
-13. **Boot test the published image.** `bootc switch` from a test Fedora atomic VM. Verify dotfiles apply, custom scripts work, signing verifies, all personal additions present.
-14. **Fast-forward `main` → `bluebuild`.** Migration done.
+10. **Recipe 06 + supporting scripts** (Cursor AppImage installer, AI CLI npm installer). Test independently because both require network access at build time and have the highest failure surface.
+11. **Workflow + Justfile + README.**
+12. **Local CI dry run.** `bluebuild validate` + `bluebuild generate` to confirm Containerfile renders.
+13. **Push branch, let GHA build.** Iterate on failures.
+14. **Boot test the published image.** `bootc switch` from a test Fedora atomic VM. Verify dotfiles apply, custom scripts work, signing verifies, all personal additions present (Zed launches, Cursor `.desktop` is in the launcher, `claude`/`codex`/`pi` are on PATH).
+15. **Fast-forward `main` → `bluebuild`.** Migration done.
 
-The audit (step 3) is the single most important step and is gating for everything after. Steps 8–9 are the substantive translation work and each becomes its own implementation phase. Steps 1–2 and 4–7 and 10 are mechanical.
+The audit (step 3) is the single most important step and is gating for everything after. Steps 8–10 are the substantive translation/install work and each becomes its own implementation phase. Steps 1–2, 4–7, and 11 are mechanical.
 
 ## Risks and unknowns
 
@@ -202,3 +210,6 @@ The audit (step 3) is the single most important step and is gating for everythin
 - **Chezmoi unit collision.** If upstream ships its own chezmoi systemd unit, our copy needs a different name or must intentionally shadow it. Audit-identifiable.
 - **Custom-scripts provenance.** Names like `zjust`/`zfetch`/`zmotd` follow upstream's `z*` convention and may originate from upstream. The audit must cleanly determine which are user-owned.
 - **`assets` submodule fate.** Pending audit; the disposition affects whether the submodule survives the migration.
+- **Cursor AppImage download stability.** The Cursor download URL and AppImage internal layout are not contractually stable. If Cursor changes their distribution (URL pattern, removes `.desktop`/icons from the AppImage, switches to .deb-only), `install-cursor.sh` breaks the build. Mitigation: pin to a known-good URL/version when available; fail loudly in CI rather than silently producing an image without Cursor.
+- **npm install at build time.** `install-ai-clis.sh` requires network during the build container run, and the three packages must be available on the public registry at that moment. Anthropic, OpenAI, or `@mariozechner` could yank a version; npm could be down. Mitigation: explicit version pins in `install-ai-clis.sh` (so a yanked latest doesn't take us out), and a clear failure (not silent skip) on registry errors.
+- **Bare-name typosquat risk.** The npm packages `claude`, `codex`, and `pi` are NOT the AI CLIs — `claude` literally self-identifies as "not the official Claude Code package." The script must use the scoped/owner-prefixed names verbatim and never fall back to bare names.
