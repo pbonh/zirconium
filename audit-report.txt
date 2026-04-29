@@ -1,0 +1,177 @@
+# Audit against upstream commit: 875d674e7aad76e1a813a07f91f0e65dad73e87c
+# Generated: 2026-04-29T20:21:41Z
+
+INHERITED: mkosi.conf.d/avengemedia-danklinux.conf
+USER-OVERRIDE: mkosi.conf.d/subprojects.conf
+USER-ADDED: mkosi.conf.d/ublue-os-packages.conf
+INHERITED: mkosi.conf.d/niri-git.conf
+INHERITED: mkosi.conf.d/non-rawhide.conf
+USER-OVERRIDE: mkosi.conf.d/theme.conf
+USER-ADDED: mkosi.conf.d/pbonh-brave.conf
+USER-ADDED: mkosi.conf.d/pbonh-docker.conf
+USER-ADDED: mkosi.conf.d/pbonh-extras.conf
+USER-ADDED: mkosi.conf.d/pbonh-copr.conf
+USER-OVERRIDE: mkosi.conf.d/terra.conf
+INHERITED: mkosi.extra/usr/bin/glorpfetch
+INHERITED: mkosi.extra/usr/bin/zfetch
+INHERITED: mkosi.extra/usr/bin/zjust
+INHERITED: mkosi.extra/usr/bin/zocr
+USER-OVERRIDE: mkosi.extra/usr/bin/zmotd
+INHERITED: mkosi.extra/usr/lib/dracut/dracut.conf.d/lvm2.conf
+INHERITED: mkosi.extra/usr/lib/dracut/dracut.conf.d/passkeys.conf
+INHERITED: mkosi.extra/usr/lib/pam.d/greetd-spawn
+INHERITED: mkosi.extra/usr/lib/systemd/system-preset/01-zirconium.preset
+INHERITED: mkosi.extra/usr/lib/systemd/system-preset/91-resolved-default.preset
+INHERITED: mkosi.extra/usr/lib/systemd/system-preset/99-no-nsresourced.preset
+INHERITED: mkosi.extra/usr/lib/systemd/system/flatpak-add-flathub-repos.service
+INHERITED: mkosi.extra/usr/lib/systemd/system/flatpak-preinstall.service
+INHERITED: mkosi.extra/usr/lib/systemd/user-preset/01-zirconium.preset
+INHERITED: mkosi.extra/usr/lib/systemd/user/chezmoi-init.service
+INHERITED: mkosi.extra/usr/lib/systemd/user/chezmoi-update.service
+INHERITED: mkosi.extra/usr/lib/systemd/user/chezmoi-update.timer
+INHERITED: mkosi.extra/usr/lib/systemd/user/fcitx5.service
+INHERITED: mkosi.extra/usr/lib/systemd/user/iio-niri.service
+INHERITED: mkosi.extra/usr/lib/systemd/user/udiskie.service
+INHERITED: mkosi.extra/usr/lib/systemd/user/dms.service.d/override.conf
+USER-ADDED: mkosi.extra/usr/lib/systemd/user/tailscale-systray.service
+INHERITED: mkosi.extra/usr/lib/sysusers.d/dms-greeter.conf
+USER-ADDED: mkosi.extra/usr/lib/sysusers.d/docker.conf
+INHERITED: mkosi.extra/usr/lib/tmpfiles.d/99-dms-greeter.conf
+INHERITED: mkosi.extra/usr/lib/tmpfiles.d/resolved-default.conf
+USER-ADDED: mkosi.extra/usr/lib/tmpfiles.d/zirconium-opt.conf
+USER-OVERRIDE: mkosi.extra/usr/lib/tmpfiles.d/99-zirconium-factory.conf
+INHERITED: mkosi.extra/usr/lib/bootc/10-zirconium-install.toml
+INHERITED: mkosi.extra/usr/share/dms/cli-policy.json
+INHERITED: mkosi.extra/usr/share/fish/vendor_conf.d/zmotd.fish
+INHERITED: mkosi.extra/usr/share/flatpak/preinstall.d/zirconium.preinstall
+USER-ADDED: mkosi.extra/usr/share/flatpak/preinstall.d/apps.preinstall
+INHERITED: mkosi.extra/usr/share/greetd/greetd-spawn.pam_env.conf
+INHERITED: mkosi.extra/usr/share/pki/containers/hawaii.pub
+INHERITED: mkosi.extra/usr/share/pki/containers/jackrabbit.pub
+USER-ADDED: mkosi.extra/usr/share/pki/containers/zirconium.pub
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/fastfetch.jsonc
+INHERITED: mkosi.extra/usr/share/zirconium/glorp.txt
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/just/00-start.just
+INHERITED: mkosi.extra/usr/share/zirconium/legally-distinct.txt
+INHERITED: mkosi.extra/usr/share/zirconium/shell/pure.bash
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/.git
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/.chezmoiignore
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_cache/DankMaterialShell/cache.json
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_cache/DankMaterialShell/dms-colors.json
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/DankMaterialShell/clsettings.json
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/DankMaterialShell/settings.json
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/dgop/colors.json
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/fastfetch/symlink_config.jsonc
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/dot_config/foot/dank-colors.ini
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/dot_config/foot/foot.ini.tmpl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/ghostty/config
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/ghostty/private_config-dankcolors
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/gtk-3.0/dank-colors.css
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/gtk-3.0/settings.ini
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/gtk-4.0/dank-colors.css
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/dot_config/niri/config.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/niri/dms.kdl
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/dot_config/niri/dms/binds.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/niri/dms/colors.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/qt6ct/colors/matugen.conf
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/qt6ct/qt6ct.conf
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/dot_config/symlink_vesktop.tmpl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/private_dot_local/share/color-schemes/DankMatugen.colors
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/private_dot_local/share/color-schemes/DankMatugenDark.colors
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/private_dot_local/share/color-schemes/DankMatugenLight.colors
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/private_dot_local/state/DankMaterialShell/session.json
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/binds.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/dms-base.kdl
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/input.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/layout.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/misc.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/shadow.kdl
+USER-OVERRIDE: mkosi.extra/usr/share/zirconium/zdots/system/niri/includes/window-rules.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zdots/system/niri/zirconium.kdl
+INHERITED: mkosi.extra/usr/share/zirconium/zirconium.txt
+USER-ADDED: mkosi.extra/usr/share/factory/etc/containers/registries.d/pbonh.yaml
+USER-OVERRIDE: mkosi.extra/usr/share/factory/etc/containers/policy.json
+INHERITED: mkosi.extra/usr/share/factory/etc/greetd/config.toml
+INHERITED: mkosi.extra/usr/share/factory/etc/profile.d/fcitx5.sh
+INHERITED: mkosi.extra/usr/share/factory/etc/profile.d/zfetch.sh
+INHERITED: mkosi.extra/usr/share/factory/etc/profile.d/zirconium-font-settings.sh
+INHERITED: mkosi.extra/usr/share/factory/etc/profile.d/zirconium-qt-override.sh
+INHERITED: mkosi.extra/usr/share/factory/etc/profile.d/zmotd.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/atuin.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/blesh.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/brew.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/carapace.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/fzf.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/mise.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/starship.sh
+USER-ADDED: mkosi.extra/usr/share/factory/etc/profile.d/zoxide.sh
+INHERITED: mkosi.extra/usr/share/factory/etc/taidan.toml
+USER-ADDED: mkosi.extra/usr/share/factory/etc/blerc
+INHERITED: mkosi.extra/usr/share/xdg-terminal-exec/xdg-terminals.list
+INHERITED: repos/avengemedia-danklinux.repo
+INHERITED: repos/avengemedia-dms-git.repo
+INHERITED: repos/terra-extras.repo
+INHERITED: repos/terra.repo
+USER-ADDED: repos/ublue-os-packages.repo
+INHERITED: repos/yalter-niri-git.repo
+INHERITED: repos/negativo-17-nvidia.repo
+INHERITED: repos/nvidia-container-toolkit.repo
+USER-ADDED: repos/brave-browser.repo
+USER-ADDED: repos/docker-ce.repo
+USER-ADDED: repos/atim-starship.repo
+USER-ADDED: repos/scottames-ghostty.repo
+USER-ADDED: repos/wezfurlong-wezterm-nightly.repo
+INHERITED: assets/.git
+INHERITED: assets/LICENSE
+INHERITED: assets/iso/product/usr/share/anaconda/pixmaps/sidebar-bg.png
+INHERITED: assets/iso/product/usr/share/anaconda/pixmaps/sidebar-logo.png
+INHERITED: assets/iso/product/usr/share/anaconda/pixmaps/topbar-bg.png
+INHERITED: assets/logos/logo-z.svg
+INHERITED: assets/logos/watermark.png
+INHERITED: assets/wallpapers/Trans Flag Sunset at Riis Beach.png
+INHERITED: assets/wallpapers/mountains.png
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-1.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-10.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-11.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-12.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-13.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-14.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-15.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-2.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-3.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-4.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-5.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-6.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-7.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-8.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor-9.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 1.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 10.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 2.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 3.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 4.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 5.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 6.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 7.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 8.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_03_21x9  - 9.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-1.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-10.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-11.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-12.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-2.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-3.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-4.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-5.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-6.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-7.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-8.jpg
+USER-ADDED: assets/wallpapers/Astronaut_Watercolor_FallWinter-9.jpg
+
+# Summary
+
+# Counts:
+# USER-ADDED:    63
+# USER-OVERRIDE: 15
+# INHERITED:     88
+# SYMLINK:       0
