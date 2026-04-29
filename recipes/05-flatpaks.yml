@@ -1,0 +1,30 @@
+---
+modules:
+  - type: default-flatpaks
+    notify: true
+    system:
+      repo:
+        url: https://flathub.org/repo/flathub.flatpakrepo
+        name: flathub
+      install:
+        # Password Manager
+        - com.bitwarden.desktop
+        # Containers
+        - io.github.DenysMb.Kontainer
+        - io.github.dvlv.boxbuddyrs
+        # Office
+        - com.collaboraoffice.Office
+        # AI
+        - com.jeffser.Alpaca
+        # Notes
+        - md.obsidian.Obsidian
+        # Calculators
+        - org.kde.cantor
+        - org.kde.kalgebra
+        - io.github.Qalculate
+        # Terminals
+        - app.devsuite.Ptyxis
+        # Media
+        - org.kde.plasmatube
+        # Cloud
+        - com.github.zocker_160.SyncThingy
