@@ -1,0 +1,51 @@
+---
+modules:
+  - type: dnf
+    install:
+      packages:
+        # Browsers
+        - brave-browser
+        # Terminals
+        - ghostty
+        - wezterm
+        - kitty
+        # Editors
+        - neovim
+        - zed
+        # Shell stack
+        - starship
+        - zsh
+        - atuin
+        - carapace
+        - nu
+        # CLI tools
+        - fd-find
+        - ripgrep
+        - ansible
+        - syncthing
+        - yazi
+        # Containers
+        - distrobox
+        - fuse
+        - fuse3
+        # Docker
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-buildx-plugin
+        - docker-compose-plugin
+        # Dev tools
+        - glibc-devel
+        - libstdc++-devel
+        - gcc-g++
+        - make
+        # Node.js (for AI CLIs in recipe 06)
+        - nodejs
+        - npm
+        # Desktop apps
+        - libreoffice
+        - thunderbird
+        # Theme
+        - qt6ct
+        # Science
+        - octave
