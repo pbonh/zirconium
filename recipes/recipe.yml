@@ -1,0 +1,13 @@
+---
+name: zirconium
+description: Personal customization layer on top of zirconium-dev/zirconium, built with BlueBuild
+base-image: ghcr.io/zirconium-dev/zirconium
+image-version: latest
+
+modules:
+  - from-file: 01-extra-repos.yml
+  - from-file: 02-extra-packages.yml
+  - from-file: 03-dotfiles.yml
+  - from-file: 04-custom-scripts.yml
+  - from-file: 05-flatpaks.yml
+  - from-file: 06-extra-tooling.yml
