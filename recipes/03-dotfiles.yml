@@ -1,0 +1,20 @@
+---
+modules:
+  # Mirror files/system/ into the image root (delivers user-override config files)
+  - type: files
+    files:
+      - source: system
+        destination: /
+      # zdots submodule lives at files/zdots/ (relocated from top-level zdots/)
+      # so BlueBuild's files module resolves it correctly via source: zdots
+      - source: zdots
+        destination: /usr/share/zirconium/zdots
+
+  # Ensure chezmoi-update.timer is enabled for all users
+  # (chezmoi unit files are inherited from upstream zirconium — not copied here)
+  - type: systemd
+    system:
+      enabled: []
+    user:
+      enabled:
+        - chezmoi-update.timer
