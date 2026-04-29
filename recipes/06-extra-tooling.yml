@@ -1,0 +1,8 @@
+---
+modules:
+  - type: script
+    snippets:
+      - "echo '==> Running install-cursor.sh and install-ai-clis.sh'"
+    scripts:
+      - install-cursor.sh
+      - install-ai-clis.sh
